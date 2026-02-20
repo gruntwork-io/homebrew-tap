@@ -4,14 +4,6 @@ A [Homebrew](https://brew.sh/) tap for installing Gruntwork CLI tools.
 
 ## Usage
 
-First, add the tap:
-
-```bash
-brew tap gruntwork-io/tap
-```
-
-Then install the available formulae:
-
 ```bash
 brew install gruntwork-io/tap/boilerplate
 brew install gruntwork-io/tap/runbooks
