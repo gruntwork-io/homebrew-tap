@@ -21,6 +21,10 @@ brew install gruntwork-io/tap/runbooks@0.5.2
 - [boilerplate](https://boilerplate.gruntwork.io/) | The template generator built for platform teams
 - [runbooks](https://github.com/gruntwork-io/runbooks) | Interactive markdown documents that unlock the knowledge of subject matter experts
 
+## For maintainers
+
+Looking to add a brew formula here? See the [Prompt for Maintainers](./PROMPT_FOR_MAINTAINERS.md) so you can use your favorite LLM to set it up.
+
 ## License
 
 All formulae in this tap install software licensed under [MPL-2.0](https://www.mozilla.org/en-US/MPL/2.0/).
