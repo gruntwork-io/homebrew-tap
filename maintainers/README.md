@@ -4,7 +4,7 @@
 
 ## Overview
 
-The [`gruntwork-io/homebrew-tap`](https://github.com/gruntwork-io/homebrew-tap) repo hosts Homebrew formulae for Gruntwork CLI tools. Formula updates are **fully automated** — when a tool repo publishes a GitHub Release, a workflow in that repo opens a PR against homebrew-tap, approves it, and auto-merges it.
+The [`gruntwork-io/homebrew-tap`](https://github.com/gruntwork-io/homebrew-tap) repo hosts Homebrew formulae for Gruntwork CLI tools. Formula updates are **fully automated** — when a tool repo publishes a GitHub Release, a workflow in that repo opens a PR against homebrew-tap and auto-merges it.
 
 No manual intervention is required for routine releases.
 
@@ -17,7 +17,7 @@ Each tool repo (e.g., `gruntwork-io/boilerplate`) contains a `.github/workflows/
 3. Computes SHA256 checksums for each binary
 4. Clones homebrew-tap, reads metadata (desc, homepage, license) from the existing unversioned formula
 5. Generates the updated unversioned formula (`<tool>.rb`) and a new versioned formula (`<tool>@<semver>.rb`)
-6. Opens a PR, approves it via a GitHub App, and enables auto-merge
+6. Opens a PR and enables auto-merge (the GitHub App bypasses the branch ruleset)
 
 ## Prerequisites
 
@@ -166,13 +166,15 @@ The workflow uses [`actions/create-github-app-token@v2`](https://github.com/acti
 ### Required GitHub App permissions
 
 - **Contents: Read & write** — to push branches and merge PRs
-- **Pull requests: Read & write** — to create and approve PRs
+- **Pull requests: Read & write** — to create and merge PRs
 
 The app is installed on `gruntwork-io/homebrew-tap` only.
 
 ### Branch protection
 
-The `main` branch on homebrew-tap has a ruleset requiring 1 approval before merging. The GitHub App provides this approval automatically, enabling auto-merge. If CI checks are added later, add them as required status checks in the same ruleset and auto-merge will wait for them to pass.
+The `main` branch on homebrew-tap has a ruleset requiring 1 approval before merging. The **Gruntwork Homebrew Tap Updater** GitHub App is in the ruleset's **bypass list** (with "Always allow"), so it can merge PRs directly without an approval. Human contributors still require a review.
+
+If CI checks are added later, add them as required status checks in the same ruleset — `--auto` merge will wait for them to pass.
 
 Auto-merge must be enabled on the homebrew-tap repo (Settings → General → "Allow auto-merge").
 
