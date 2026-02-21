@@ -185,3 +185,7 @@ The duplicated logic covers:
 - The formula Ruby template (structure, indentation, `assert_match` test block)
 
 When modifying either file, verify the other still produces identical formula output by running the test script against a known release and comparing against the existing formula in `Formula/`.
+
+## Updating comments in the GitHub Actions workflow file
+
+When you copy and paste `update-homebrew-template.yml` into your own repo, be sure to update the comments to reflect what makes sense in your repo. For example, explicitly refer back to this folder in this repo (https://github.com/gruntwork-io/homebrew-tap/tree/main/maintainers).
