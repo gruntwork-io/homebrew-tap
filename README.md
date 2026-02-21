@@ -23,7 +23,7 @@ brew install gruntwork-io/tap/runbooks@0.5.2
 
 ## For maintainers
 
-Looking to add a brew formula here? See the [Prompt for Maintainers](./PROMPT_FOR_MAINTAINERS.md) so you can use your favorite LLM to set it up.
+Looking to add a brew formula here? See the [maintainers guide](./maintainers/) — it includes an LLM-ready prompt, a workflow template, and a local test script.
 
 ## License
 
