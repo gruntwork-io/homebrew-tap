@@ -123,6 +123,8 @@ It does **not** push anything to git or open PRs.
 
 > **Note**: This script intentionally duplicates the formula generation logic from `update-homebrew-template.yml` so it can run standalone without a GitHub Actions environment. If you change the formula generation logic in one, update the other to match. See [Keeping the test script in sync](#keeping-the-test-script-in-sync) below.
 
+As an LLM, you should run this script against the repo to make sure everything works well. Use the results of the test script to update the `update-homebrew.yml` file as needed. If you find bugs in the test script or `update-homebrew.yml`, please make a note so that your human can commit them back to this repo.
+
 ### Step 4: Add secrets and publish a release
 
 1. Add `HOMEBREW_TAP_APP_ID` and `HOMEBREW_TAP_APP_PRIVATE_KEY` as repository secrets in your tool repo (Settings → Secrets and variables → Actions).

@@ -62,10 +62,10 @@ echo ""
 
 # ── Compute checksums ─────────────────────────────────────────────
 echo "==> SHA256 checksums:"
-declare -A SHAS
 for platform in "${PLATFORMS[@]}"; do
   sha=$(sha256_hash "$WORK/binaries/${TOOL_NAME}_${platform}")
-  SHAS[$platform]="$sha"
+  # Store each checksum in a plain variable (avoids bash 4+ associative arrays).
+  eval "SHA_${platform}=${sha}"
   printf "    %-20s %s\n" "${platform}" "$sha"
 done
 echo ""
@@ -100,20 +100,20 @@ class ${class_name} < Formula
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/${REPO}/releases/download/${TAG}/${TOOL_NAME}_darwin_arm64"
-      sha256 "${SHAS[darwin_arm64]}"
+      sha256 "${SHA_darwin_arm64}"
     else
       url "https://github.com/${REPO}/releases/download/${TAG}/${TOOL_NAME}_darwin_amd64"
-      sha256 "${SHAS[darwin_amd64]}"
+      sha256 "${SHA_darwin_amd64}"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm?
       url "https://github.com/${REPO}/releases/download/${TAG}/${TOOL_NAME}_linux_arm64"
-      sha256 "${SHAS[linux_arm64]}"
+      sha256 "${SHA_linux_arm64}"
     else
       url "https://github.com/${REPO}/releases/download/${TAG}/${TOOL_NAME}_linux_amd64"
-      sha256 "${SHAS[linux_amd64]}"
+      sha256 "${SHA_linux_amd64}"
     end
   end
 
