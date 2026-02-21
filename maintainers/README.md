@@ -12,7 +12,7 @@ No manual intervention is required for routine releases.
 
 Each tool repo (e.g., `gruntwork-io/boilerplate`) contains a `.github/workflows/update-homebrew.yml` workflow that:
 
-1. Triggers on `release: [published]`
+1. Is called from the tool's release workflow via `workflow_call` (runs **after** release assets are uploaded — see [Why `workflow_call` instead of `release: published`](#why-workflow_call-instead-of-release-published))
 2. Downloads all 4 platform/arch binaries from the release
 3. Computes SHA256 checksums for each binary
 4. Clones homebrew-tap, reads metadata (desc, homepage, license) from the existing unversioned formula
@@ -97,6 +97,20 @@ You can compute initial SHA256s by downloading the release binaries and running 
 Copy the workflow template from [`maintainers/update-homebrew-template.yml`](./update-homebrew-template.yml) to `.github/workflows/update-homebrew.yml` in your tool's repo.
 
 Before committing, set **`VERSION_CMD`** in the `env` block to the flag your tool uses for printing its version (e.g., `--version` or `version`). This is used in the formula's `test` block. Everything else (tool name, class name, SHA256s) is derived automatically at runtime.
+
+Then, **chain it from your release workflow** by adding a job at the end that calls it after the release is created:
+
+```yaml
+  update-homebrew:
+    name: Update Homebrew Formula
+    needs: create-release          # or whatever your release job is called
+    uses: ./.github/workflows/update-homebrew.yml
+    with:
+      tag: ${{ github.ref_name }}
+    secrets: inherit
+```
+
+This ensures the homebrew workflow only runs after release assets have been uploaded. See [Why `workflow_call` instead of `release: published`](#why-workflow_call-instead-of-release-published) for context.
 
 ### Step 3: Test locally before your first release
 
@@ -189,6 +203,28 @@ The duplicated logic covers:
 - The formula Ruby template (structure, indentation, `assert_match` test block)
 
 When modifying either file, verify the other still produces identical formula output by running the test script against a known release and comparing against the existing formula in `Formula/`.
+
+## Why `workflow_call` instead of `release: published`
+
+An earlier version of this workflow used `on: release: [published]` as its trigger. This caused a race condition: the `release: published` event fires as soon as the GitHub Release is created, but the release binaries may not have been uploaded yet (the build-and-release workflow was still running). This resulted in `gh release download` failing with "no assets to download."
+
+Using `workflow_call` and chaining from the release workflow with `needs: create-release` guarantees the homebrew update only runs after the release job has finished uploading all assets.
+
+## Troubleshooting
+
+### `error:1E08010C:DECODER routines::unsupported`
+
+This error from `actions/create-github-app-token` means the GitHub App private key in `HOMEBREW_TAP_APP_PRIVATE_KEY` is in a format that OpenSSL 3.x can't parse. Common causes:
+
+- **Wrong key format**: The key is in PKCS#1 format (`-----BEGIN RSA PRIVATE KEY-----`). Convert it to PKCS#8:
+  ```bash
+  openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in old-key.pem -out new-key.pem
+  ```
+  The output should start with `-----BEGIN PRIVATE KEY-----`.
+
+- **Lost newlines**: When pasting the PEM key into GitHub Secrets, newlines were stripped. Make sure the full PEM block is pasted with newlines preserved (header, body, and footer).
+
+You can also generate a fresh private key from the GitHub App settings page — GitHub now generates PKCS#8 keys by default.
 
 ## Updating comments in the GitHub Actions workflow file
 

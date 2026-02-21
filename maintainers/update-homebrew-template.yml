@@ -1,5 +1,10 @@
 # Copy this file to .github/workflows/update-homebrew.yml in your tool repo.
 #
+# This workflow is designed to be called from your release workflow using
+# workflow_call, so it runs AFTER release assets are uploaded. See the
+# maintainers guide for how to chain it:
+# https://github.com/gruntwork-io/homebrew-tap/tree/main/maintainers
+#
 # Before committing, update VERSION_CMD in the job-level env block to match
 # the flag your tool uses to print its version (e.g., --version, version, -v).
 #
@@ -14,8 +19,12 @@
 name: Update Homebrew Formula
 
 on:
-  release:
-    types: [published]
+  workflow_call:
+    inputs:
+      tag:
+        description: 'The release tag (e.g. v1.2.3)'
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -45,7 +54,7 @@ jobs:
         id: download
         env:
           GH_TOKEN: ${{ github.token }}
-          TAG: ${{ github.event.release.tag_name }}
+          TAG: ${{ inputs.tag }}
         run: |
           TOOL_NAME="${GITHUB_REPOSITORY#*/}"
           mkdir -p /tmp/binaries
@@ -75,7 +84,7 @@ jobs:
 
       - name: Generate formulae
         env:
-          TAG: ${{ github.event.release.tag_name }}
+          TAG: ${{ inputs.tag }}
           TOOL_NAME: ${{ steps.download.outputs.tool_name }}
           SHA_DARWIN_ARM64: ${{ steps.checksums.outputs.sha_darwin_arm64 }}
           SHA_DARWIN_AMD64: ${{ steps.checksums.outputs.sha_darwin_amd64 }}
@@ -146,7 +155,7 @@ jobs:
       - name: Open PR
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
-          TAG: ${{ github.event.release.tag_name }}
+          TAG: ${{ inputs.tag }}
           TOOL_NAME: ${{ steps.download.outputs.tool_name }}
         run: |
           cd /tmp/homebrew-tap
@@ -190,4 +199,5 @@ jobs:
           gh pr merge "$PR_URL" \
             --repo gruntwork-io/homebrew-tap \
             --auto \
-            --merge
+            --merge \
+            --delete-branch
