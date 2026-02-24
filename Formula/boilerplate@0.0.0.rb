@@ -1,4 +1,4 @@
-class Boilerplate < Formula
+class BoilerplateAT000 < Formula
   desc "The template generator built for platform teams"
   homepage "https://boilerplate.gruntwork.io/"
   version "v0.0.0-test-signing"
