@@ -1,26 +1,26 @@
-class Boilerplate < Formula
+class BoilerplateAT0120 < Formula
   desc "The template generator built for platform teams"
   homepage "https://boilerplate.gruntwork.io/"
-  version "v0.0.0-test-signing"
+  version "v0.12.0-alpha1"
   license "MPL-2.0"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/gruntwork-io/boilerplate/releases/download/v0.0.0-test-signing/boilerplate_darwin_arm64"
-      sha256 "937a4a1a836b56dbe2f09acef7c6dc2e5f27d044c847e9367115df4f3b6d37e2"
+      url "https://github.com/gruntwork-io/boilerplate/releases/download/v0.12.0-alpha1/boilerplate_darwin_arm64"
+      sha256 "669ec46e69e608465bdc781d0dd1906ff916a2fd06682f5da88c57584d845921"
     else
-      url "https://github.com/gruntwork-io/boilerplate/releases/download/v0.0.0-test-signing/boilerplate_darwin_amd64"
-      sha256 "f58b9de7ca1cf09d827935c480c8e3c64e11bad9bf5e71b9e97480ef9e5f0e5a"
+      url "https://github.com/gruntwork-io/boilerplate/releases/download/v0.12.0-alpha1/boilerplate_darwin_amd64"
+      sha256 "44e401006bf460a97641dd6aca4e00456526c1349bc1f26da73633f32804090b"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm?
-      url "https://github.com/gruntwork-io/boilerplate/releases/download/v0.0.0-test-signing/boilerplate_linux_arm64"
-      sha256 "c435a58c3faf10eed02780909f3a81c402c77b2c5fcd8524befbd23ae09ff363"
+      url "https://github.com/gruntwork-io/boilerplate/releases/download/v0.12.0-alpha1/boilerplate_linux_arm64"
+      sha256 "af0dd7256c951efe237f5ce47c0b2dc22bc6e0355691b261088113fe0a648ff3"
     else
-      url "https://github.com/gruntwork-io/boilerplate/releases/download/v0.0.0-test-signing/boilerplate_linux_amd64"
-      sha256 "aa27c9213f1d87824d847a2bec1c7aed65a7c27fbbcc0232ef003ab7d4563fa2"
+      url "https://github.com/gruntwork-io/boilerplate/releases/download/v0.12.0-alpha1/boilerplate_linux_amd64"
+      sha256 "dd5e1b587fd7db8b5e4cd6e444d1b7ef932bc2d9d252cb3dc21be1979182350d"
     end
   end
 
