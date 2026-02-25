@@ -1,4 +1,4 @@
-class Runbooks < Formula
+class RunbooksAT060 < Formula
   desc "Interactive markdown documents that unlock the knowledge of subject matter experts"
   homepage "https://github.com/gruntwork-io/runbooks"
   version "beta-v0.6.0"
